@@ -1,0 +1,19 @@
+{
+  "name": "src",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon src/index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@hapi/hapi": "^20.2.2",
+    "config": "^3.3.7",
+    "cors": "^2.8.5",
+    "mongoose": "^6.5.2",
+    "nodemon": "^2.0.19"
+  }
+}
