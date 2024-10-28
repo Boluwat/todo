@@ -1,8 +1,7 @@
 const Joi = require("joi");
 const { taskControllers } = require("../controllers");
-const configs = require('config')
+const configs = require("config");
 const namespace = require("hapijs-namespace");
-
 
 module.exports = (server, prefix) => {
   namespace(server, prefix, [
@@ -15,8 +14,9 @@ module.exports = (server, prefix) => {
         tags: ["api", "tasks"],
         validate: {
           payload: Joi.object({
-            task: Joi.string().required(),
-            completed: Joi.boolean(),
+            description: Joi.string().required(),
+            pirority: Joi.string().valid("Medium", "High", "Low").required(),
+            dueDate: Joi.string().required(),
           }),
           failAction: async (request, h, err) => {
             throw err;
@@ -36,7 +36,7 @@ module.exports = (server, prefix) => {
           query: Joi.object({
             limit: Joi.number(),
             offset: Joi.number(),
-            completed: Joi.boolean(),
+            status: Joi.string().valid("In Progress", "Complete", "Pending"),
           }),
           failAction: async (request, h, err) => {
             throw err;
@@ -75,8 +75,9 @@ module.exports = (server, prefix) => {
             id: Joi.string().required().min(24).max(24),
           }),
           payload: Joi.object({
-            task: Joi.string().optional(),
-            completed: Joi.boolean().optional(),
+            description: Joi.string(),
+            pirority: Joi.string().valid("Medium", "High", "Low"),
+            dueDate: Joi.string(),
           }),
           failAction: async (request, h, err) => {
             throw err;

@@ -1,21 +1,23 @@
 const { Task } = require("../models/task");
 const { isValidObjectId } = require("mongoose");
+const moment = require('moment')
 
 module.exports = {
   taskServices() {
     return {
       async create(payload) {
         try {
-          const task = await Task.create(payload);
-          return { Tasks: task._id };
+          payload.dueDate = moment(payload.dueDate).format('MMMM Do YYYY, h:mm:ss a');
+          await Task.create(payload);
+          return { Tasks: payload };
         } catch (error) {
           console.log(error);
         }
       },
-      async getAll({ offset = 0, limit = 100, completed } = {}) {
+      async getAll({ offset = 0, limit = 100, status } = {}) {
         const query = {};
-        if (completed) {
-          query.completed = completed;
+        if (status) {
+          query.status = status;
         }
         const totalCounts = await Task.countDocuments(query);
         const value = await Task.find(query)
@@ -33,6 +35,7 @@ module.exports = {
       async update(payload, id) {
         try {
           if (!isValidObjectId(id)) return { error: "not found" };
+          payload.dueDate = moment(payload.dueDate).format('MMMM Do YYYY, h:mm:ss a');
           const task = await Task.findOneAndUpdate(
             {
               _id: id,
